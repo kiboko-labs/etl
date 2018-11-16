@@ -1,6 +1,6 @@
 <?php
 
-namespace Kiboko\Component\ETL\Extractor;
+namespace Kiboko\Component\ETL\Flow\Extractor;
 
 class SplCSVExtractor implements ExtractorInterface
 {
@@ -43,9 +43,9 @@ class SplCSVExtractor implements ExtractorInterface
     }
 
     /**
-     * @return \Iterator
+     * @return \Generator
      */
-    public function extract(): \Iterator
+    public function extract(): \Generator
     {
         if ($this->file->eof()) {
             return;

@@ -4,8 +4,113 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "7bdc82467992be2b1800719472725b3e",
-    "packages": [],
+    "content-hash": "39e70306c6a7d1028089b7613fc38fe5",
+    "packages": [
+        {
+            "name": "m6web/tornado",
+            "version": "v0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/M6Web/Tornado.git",
+                "reference": "0f06d20752459df413e25121cd59cef088d68635"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/M6Web/Tornado/zipball/0f06d20752459df413e25121cd59cef088d68635",
+                "reference": "0f06d20752459df413e25121cd59cef088d68635",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1",
+                "psr/http-message": "^1.0"
+            },
+            "require-dev": {
+                "amphp/amp": "^2.0",
+                "ext-curl": "^7.1",
+                "guzzlehttp/guzzle": "^6.3",
+                "m6web/php-cs-fixer-config": "^1.0",
+                "phpstan/phpstan": "^0.10.5",
+                "phpunit/phpunit": "^7.3",
+                "react/event-loop": "^1.0",
+                "react/promise": "^2.7"
+            },
+            "suggest": {
+                "amphp/amp": "Needed to use Tornado\\Adapter\\Amp\\EventLoop",
+                "guzzlehttp/guzzle": "Needed to use Tornado\\Adapter\\Guzzle\\HttpClient",
+                "react/event-loop": "Needed to use Tornado\\Adapter\\ReactPhp\\EventLoop",
+                "react/promise": "Needed to use Tornado\\Adapter\\ReactPhp\\EventLoop"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "M6Web\\Tornado\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "M6Web",
+                    "email": "opensource@m6web.fr",
+                    "homepage": "http://tech.m6web.fr/"
+                }
+            ],
+            "description": "A library for asynchronous programming.",
+            "time": "2018-10-25T11:51:18+00:00"
+        },
+        {
+            "name": "psr/http-message",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/http-message.git",
+                "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/http-message/zipball/f6561bf28d520154e4b0ec72be95418abe6d9363",
+                "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Http\\Message\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for HTTP messages",
+            "homepage": "https://github.com/php-fig/http-message",
+            "keywords": [
+                "http",
+                "http-message",
+                "psr",
+                "psr-7",
+                "request",
+                "response"
+            ],
+            "time": "2016-08-06T14:39:51+00:00"
+        }
+    ],
     "packages-dev": [
         {
             "name": "doctrine/instantiator",

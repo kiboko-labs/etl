@@ -1,6 +1,6 @@
 <?php
 
-namespace Kiboko\Component\ETL\Transformer;
+namespace Kiboko\Component\ETL\Flow\Transformer;
 
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 

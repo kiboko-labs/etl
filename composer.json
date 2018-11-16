@@ -1,6 +1,6 @@
 {
     "name": "kiboko/etl",
-    "description": "This library implements this concept in PHP with the help of iterators and generators",
+    "description": "This library implements the Extract-Transform-Load pattern asynchronously in PHP with the help of iterators and generators",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -9,7 +9,9 @@
             "email": "gregory@kiboko.fr"
         }
     ],
-    "require": {},
+    "require": {
+        "m6web/tornado": "^0.1.0"
+    },
     "require-dev": {
         "phpunit/phpunit": "6.5.*"
     },

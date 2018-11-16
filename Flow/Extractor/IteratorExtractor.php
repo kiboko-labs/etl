@@ -1,6 +1,6 @@
 <?php
 
-namespace Kiboko\Component\ETL\Extractor;
+namespace Kiboko\Component\ETL\Flow\Extractor;
 
 class IteratorExtractor implements ExtractorInterface
 {
@@ -18,9 +18,9 @@ class IteratorExtractor implements ExtractorInterface
     }
 
     /**
-     * @return \Iterator
+     * @return \Generator
      */
-    public function extract(): \Iterator
+    public function extract(): \Generator
     {
         yield from $this->traversable;
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Kiboko\Component\ETL\Loader;
+namespace Kiboko\Component\ETL\Flow\Loader;
 
 class SplCSVLoader implements LoaderInterface
 {
@@ -19,9 +19,8 @@ class SplCSVLoader implements LoaderInterface
 
     public function load(): \Generator
     {
-        while ($line = yield) {
-            $this->file->fputcsv($line);
-            yield $line;
+        while (!$this->file->eof()) {
+            $line = yield $this->file->fgetcsv();
         }
     }
 }

@@ -2,16 +2,13 @@
 
 namespace Kiboko\Component\ETL\Pipeline;
 
-use Kiboko\Component\ETL\Extractor\ExtractorInterface;
-use Kiboko\Component\ETL\Loader\LoaderInterface;
-use Kiboko\Component\ETL\Mapper\MapForkBuilder;
-use Kiboko\Component\ETL\Mapper\MapperInterface;
+use Kiboko\Component\ETL\Flow\Extractor\ExtractorInterface;
+use Kiboko\Component\ETL\Flow\Loader\LoaderInterface;
+use Kiboko\Component\ETL\Flow\Transformer\TransformerInterface;
 use Kiboko\Component\ETL\Pipeline\Feature\ExtractingInterface;
 use Kiboko\Component\ETL\Pipeline\Feature\ForkingInterface;
 use Kiboko\Component\ETL\Pipeline\Feature\LoadingInterface;
-use Kiboko\Component\ETL\Pipeline\Feature\MappingInterface;
 use Kiboko\Component\ETL\Pipeline\Feature\TransformingInterface;
-use Kiboko\Component\ETL\Transformer\TransformerInterface;
 
 class Pipeline implements PipelineInterface
 {

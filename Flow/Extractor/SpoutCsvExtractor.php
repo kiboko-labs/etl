@@ -1,6 +1,6 @@
 <?php
 
-namespace Kiboko\Component\ETL\Extractor;
+namespace Kiboko\Component\ETL\Flow\Extractor;
 
 use Box\Spout\Reader\CSV\Reader;
 use Box\Spout\Reader\SheetInterface;
@@ -21,11 +21,11 @@ class SpoutCsvExtractor implements ExtractorInterface
     }
 
     /**
-     * @return \Iterator
+     * @return \Generator
      *
      * @throws \Box\Spout\Reader\Exception\ReaderNotOpenedException
      */
-    public function extract(): \Iterator
+    public function extract(): \Generator
     {
         /** @var SheetInterface $sheet */
         foreach ($this->reader->getSheetIterator() as $sheet) {

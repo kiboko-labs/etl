@@ -1,6 +1,6 @@
 <?php
 
-namespace Kiboko\Component\ETL\Extractor;
+namespace Kiboko\Component\ETL\Flow\Extractor;
 
 use Box\Spout\Reader\SheetInterface;
 
@@ -20,9 +20,9 @@ class SpoutSheetExtractor implements ExtractorInterface
     }
 
     /**
-     * @return \Iterator
+     * @return \Generator
      */
-    public function extract(): \Iterator
+    public function extract(): \Generator
     {
         yield from $this->sheet;
     }

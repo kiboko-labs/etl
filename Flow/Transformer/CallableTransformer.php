@@ -1,6 +1,6 @@
 <?php
 
-namespace Kiboko\Component\ETL\Transformer;
+namespace Kiboko\Component\ETL\Flow\Transformer;
 
 class CallableTransformer implements TransformerInterface
 {
@@ -10,10 +10,11 @@ class CallableTransformer implements TransformerInterface
     private $callback;
 
     /**
-     * @param $callback
+     * @param callable $callback
      */
-    public function __construct(callable $callback)
-    {
+    public function __construct(
+        callable $callback
+    ) {
         $this->callback = $callback;
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Kiboko\Component\ETL\Loader;
+namespace Kiboko\Component\ETL\Flow\Loader;
 
 use Box\Spout\Writer\CSV\Writer;
 
