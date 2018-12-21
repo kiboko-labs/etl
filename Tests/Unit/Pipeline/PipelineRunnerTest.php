@@ -57,6 +57,34 @@ class PipelineRunnerTest extends IterableTestCase
                 'tema',
             ]
         ];
+
+        yield [
+            new \ArrayIterator([
+                'lorem',
+                'ipsum',
+                'dolor',
+                'sit',
+                'amet',
+            ]),
+            function() {
+                while ($item = yield) {
+                    yield strrev($item) . '-1';
+                    yield strrev($item) . '-2';
+                }
+            },
+            [
+                'merol-1',
+                'merol-2',
+                'muspi-1',
+                'muspi-2',
+                'rolod-1',
+                'rolod-2',
+                'tis-1',
+                'tis-2',
+                'tema-1',
+                'tema-2',
+            ]
+        ];
     }
 
     /**
