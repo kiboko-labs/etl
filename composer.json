@@ -10,6 +10,7 @@
         }
     ],
     "require-dev": {
+        "ext-pdo": "*",
         "phpunit/phpunit": "6.5.*",
         "johnkary/phpunit-speedtrap": "^2.0",
         "mybuilder/phpunit-accelerator": "^2.0",
@@ -21,6 +22,7 @@
         }
     },
     "suggest": {
-        "box/spout": "In order to read Excel (.xlsx) files, the box/spout package is required."
+        "box/spout": "In order to read Excel (.xlsx) files, the box/spout package is required.",
+        "ext-pdo": "In order to read and write to databases with the PDO extension."
     }
 }
