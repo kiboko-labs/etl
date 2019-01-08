@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- https://phpunit.de/manual/current/en/appendixes.configuration.html -->
+<phpunit
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/5.7/phpunit.xsd"
+        backupGlobals="false"
+        backupStaticAttributes="false"
+        bootstrap="vendor/autoload.php"
+        cacheTokens="true"
+        stopOnError="false"
+        stopOnFailure="false"
+        stopOnWarning="false"
+        stopOnIncomplete="false"
+        stopOnRisky="false"
+        stopOnSkipped="false"
+        failOnRisky="false"
+        failOnWarning="true"
+        beStrictAboutChangesToGlobalState="false"
+        beStrictAboutOutputDuringTests="false"
+        beStrictAboutResourceUsageDuringSmallTests="false"
+        beStrictAboutTestsThatDoNotTestAnything="false"
+        beStrictAboutTodoAnnotatedTests="false"
+        beStrictAboutCoversAnnotation="false"
+        checkForUnintentionallyCoveredCode="false"
+        enforceTimeLimit="false"
+        verbose="false">
+
+    <groups>
+        <exclude>
+            <group>vendor</group>
+        </exclude>
+    </groups>
+    <testsuites>
+        <testsuite name="unit">
+            <directory>Tests/Unit</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <ini name="error_reporting" value="-1"/>
+        <ini name="memory_limit" value="-1"/>
+    </php>
+    <listeners>
+        <listener class="JohnKary\PHPUnit\Listener\SpeedTrapListener">
+            <arguments>
+                <array>
+                    <element key="slowThreshold">
+                        <integer>1000</integer>
+                    </element>
+                </array>
+            </arguments>
+        </listener>
+        <listener class="MyBuilder\PhpunitAccelerator\TestListener"/>
+    </listeners>
+</phpunit>

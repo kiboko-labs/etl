@@ -9,6 +9,7 @@ class PipelineRunnerTest extends IterableTestCase
 {
     public function providerRun()
     {
+        // Test if pipeline can walk items, without adding or removing any item
         yield [
             new \ArrayIterator([
                 'lorem',
@@ -31,6 +32,7 @@ class PipelineRunnerTest extends IterableTestCase
             ]
         ];
 
+        // Test if pipeline can walk items, while removing some items
         yield [
             new \ArrayIterator([
                 'lorem',
@@ -58,6 +60,7 @@ class PipelineRunnerTest extends IterableTestCase
             ]
         ];
 
+        // Test if pipeline can walk items, while adding some items
         yield [
             new \ArrayIterator([
                 'lorem',
@@ -68,21 +71,21 @@ class PipelineRunnerTest extends IterableTestCase
             ]),
             function() {
                 while ($item = yield) {
-                    yield strrev($item) . '-1';
-                    yield strrev($item) . '-2';
+                    yield $item;
+                    yield strrev($item);
                 }
             },
             [
-                'merol-1',
-                'merol-2',
-                'muspi-1',
-                'muspi-2',
-                'rolod-1',
-                'rolod-2',
-                'tis-1',
-                'tis-2',
-                'tema-1',
-                'tema-2',
+                'lorem',
+                'merol',
+                'ipsum',
+                'muspi',
+                'dolor',
+                'rolod',
+                'sit',
+                'tis',
+                'amet',
+                'tema',
             ]
         ];
     }

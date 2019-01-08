@@ -20,11 +20,11 @@ abstract class IterableTestCase extends TestCase
         $both->attachIterator($actual);
 
         $index = 0;
-        foreach ($both as list($leftValue, $rightValue)) {
+        foreach ($both as list($expectedItem, $actualItem)) {
             ++$index;
-            list($leftKey, $rightKey) = $both->key();
-            $this->assertSame($leftValue, $rightValue, sprintf("%sValues of Iteration #%d", $message, $index));
-            $this->assertSame($leftKey, $rightKey, sprintf("%sKeys of Iteration #%d", $message, $index));
+            list($expectedKey, $actualKey) = $both->key();
+            $this->assertSame($expectedItem, $actualItem, sprintf("%sValues of Iteration #%d", $message, $index));
+            $this->assertSame($expectedKey, $actualKey, sprintf("%sKeys of Iteration #%d", $message, $index));
         }
 
         $this->assertFalse($expected->valid(), sprintf("%sCount mismatch: Expected Iterator still valid (#%d)", $message, $index));
@@ -33,7 +33,7 @@ abstract class IterableTestCase extends TestCase
 
     protected function assertIterationValues(array $expected, \Traversable $actual, $message = '')
     {
-        $actual = iterator_to_array($actual, FALSE);
+        $actual = iterator_to_array($actual, false);
         $this->assertEquals($expected, $actual, $message);
     }
 }

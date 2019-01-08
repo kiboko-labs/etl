@@ -2,7 +2,7 @@
 
 namespace Kiboko\Component\ETL\Pipeline\Feature;
 
-use Kiboko\Component\ETL\Transformer\TransformerInterface;
+use Kiboko\Component\ETL\Flow\Transformer\TransformerInterface;
 
 interface TransformingInterface
 {

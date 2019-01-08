@@ -4,7 +4,7 @@ namespace Kiboko\Component\ETL\Tests\Unit\Transformer;
 
 use Kiboko\Component\ETL\Pipeline\PipelineRunner;
 use Kiboko\Component\ETL\Tests\Unit\IterableTestCase;
-use Kiboko\Component\ETL\Transformer\ColumnTrimTransformer;
+use Kiboko\Component\ETL\Flow\Transformer\ColumnTrimTransformer;
 
 class ColumnTrimTransformerTest extends IterableTestCase
 {

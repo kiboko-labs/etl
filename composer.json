@@ -9,15 +9,18 @@
             "email": "gregory@kiboko.fr"
         }
     ],
-    "require": {
-        "m6web/tornado": "^0.1.0"
-    },
     "require-dev": {
-        "phpunit/phpunit": "6.5.*"
+        "phpunit/phpunit": "6.5.*",
+        "johnkary/phpunit-speedtrap": "^2.0",
+        "mybuilder/phpunit-accelerator": "^2.0",
+        "box/spout": "^2.7"
     },
     "autoload": {
         "psr-4": {
             "Kiboko\\Component\\ETL\\": ""
         }
+    },
+    "suggest": {
+        "box/spout": "In order to read Excel (.xlsx) files, the box/spout package is required."
     }
 }
