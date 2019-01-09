@@ -2,6 +2,9 @@
 
 namespace Kiboko\Component\ETL\Flow\Transformer;
 
+use Kiboko\Component\ETL\Pipeline\EmptyBucket;
+use Kiboko\Component\ETL\Pipeline\GenericBucket;
+
 class FilterTransformer implements TransformerInterface
 {
     /**
@@ -22,10 +25,11 @@ class FilterTransformer implements TransformerInterface
         $callback = $this->callback;
         while ($line = yield) {
             if (!$callback($line)) {
+                yield new EmptyBucket();
                 continue;
             }
 
-            yield $line;
+            yield new GenericBucket($line);
         }
     }
 }

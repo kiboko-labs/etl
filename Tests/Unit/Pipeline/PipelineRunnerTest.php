@@ -2,6 +2,8 @@
 
 namespace Kiboko\Component\ETL\Tests\Unit\Pipeline;
 
+use Kiboko\Component\ETL\Pipeline\EmptyBucket;
+use Kiboko\Component\ETL\Pipeline\GenericBucket;
 use Kiboko\Component\ETL\Pipeline\PipelineRunner;
 use Kiboko\Component\ETL\Tests\Unit\IterableTestCase;
 
@@ -20,7 +22,7 @@ class PipelineRunnerTest extends IterableTestCase
             ]),
             function() {
                 while ($item = yield) {
-                    yield strrev($item);
+                    yield new GenericBucket(strrev($item));
                 }
             },
             [
@@ -45,17 +47,15 @@ class PipelineRunnerTest extends IterableTestCase
                 while ($item = yield) {
                     static $i = 0;
                     if ($i++ % 2 === 0) {
-                        yield strrev($item);
+                        yield new GenericBucket(strrev($item));
                     } else {
-                        yield;
+                        yield new EmptyBucket();
                     }
                 }
             },
             [
                 'merol',
-                null,
                 'rolod',
-                null,
                 'tema',
             ]
         ];
@@ -71,8 +71,10 @@ class PipelineRunnerTest extends IterableTestCase
             ]),
             function() {
                 while ($item = yield) {
-                    yield $item;
-                    yield strrev($item);
+                    yield new GenericBucket(
+                        $item,
+                        strrev($item)
+                    );
                 }
             },
             [
@@ -118,12 +120,12 @@ class PipelineRunnerTest extends IterableTestCase
             ]),
             function() {
                 while ($item = yield) {
-                    yield $item;
+                    yield new GenericBucket($item);
                 }
             },
             function() {
                 while ($item = yield) {
-                    yield strrev($item);
+                    yield new GenericBucket(strrev($item));
                 }
             },
             [
@@ -148,15 +150,15 @@ class PipelineRunnerTest extends IterableTestCase
                     static $i = 0;
 
                     if (($i++ % 2) === 0) {
-                        yield $item;
+                        yield new GenericBucket($item);
                     } else {
-                        yield;
+                        yield new EmptyBucket();
                     }
                 }
             },
             function() {
                 while ($item = yield) {
-                    yield strrev($item);
+                    yield new GenericBucket(strrev($item));
                 }
             },
             [
@@ -228,15 +230,15 @@ class PipelineRunnerTest extends IterableTestCase
 
         $it = $run->pipe($source, (function() {
             while ($item = yield) {
-                yield strrev($item);
+                yield new GenericBucket(strrev($item));
             }
         })(), (function() {
             while ($item = yield) {
-                yield str_pad($item, 7, '1', STR_PAD_BOTH);
+                yield new GenericBucket(str_pad($item, 7, '1', STR_PAD_BOTH));
             }
         })(), (function() {
             while ($item = yield) {
-                yield str_pad($item, 9, ' ', STR_PAD_BOTH);
+                yield new GenericBucket(str_pad($item, 9, ' ', STR_PAD_BOTH));
             }
         })());
 

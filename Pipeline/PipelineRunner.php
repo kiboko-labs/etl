@@ -10,7 +10,19 @@ class PipelineRunner implements PipelineRunnerInterface
         $wrapper->rewind($source, ...$async);
 
         while ($wrapper->valid($source, ...$async)) {
-            yield $this->reduce($reduce, $wrapper->send($source->current(), ...$async));
+            $bucket = $this->reduce($reduce, $wrapper->send($source->current(), ...$async));
+
+            if (!$bucket instanceof ResultBucketInterface) {
+                throw new \UnexpectedValueException(strtr(
+                    'Invalid yielded data, was expecting %expected%, got %actual%.',
+                    [
+                        '%expected%' => ResultBucketInterface::class,
+                        '%actual%' => is_object($bucket) ? get_class($bucket) : gettype($bucket),
+                    ]
+                ));
+            }
+
+            yield from $bucket;
 
             $wrapper->next($source, ...$async);
         }
@@ -58,7 +70,19 @@ class PipelineRunner implements PipelineRunnerInterface
         $wrapper->rewind($iterator, $generator);
 
         while ($wrapper->valid($iterator)) {
-            yield $generator->send($iterator->current());
+            $bucket = $generator->send($iterator->current());
+
+            if (!$bucket instanceof ResultBucketInterface) {
+                throw new \UnexpectedValueException(strtr(
+                    'Invalid yielded data, was expecting %expected%, got %actual%.',
+                    [
+                        '%expected%' => ResultBucketInterface::class,
+                        '%actual%' => is_object($bucket) ? get_class($bucket) : gettype($bucket),
+                    ]
+                ));
+            }
+
+            yield from $bucket;
 
             $wrapper->next($iterator, $generator);
         }
