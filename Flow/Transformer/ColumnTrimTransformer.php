@@ -2,6 +2,8 @@
 
 namespace Kiboko\Component\ETL\Flow\Transformer;
 
+use Kiboko\Component\ETL\Pipeline\GenericBucket;
+
 class ColumnTrimTransformer implements TransformerInterface
 {
     /**
@@ -28,7 +30,7 @@ class ColumnTrimTransformer implements TransformerInterface
                 $line[$column] = trim($line[$column]);
             }
 
-            yield $line;
+            yield new GenericBucket($line);
         }
     }
 }

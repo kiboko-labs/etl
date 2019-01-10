@@ -2,6 +2,7 @@
 
 namespace Kiboko\Component\ETL\Tests\Unit\Transformer;
 
+use Kiboko\Component\ETL\Pipeline\GenericBucket;
 use Kiboko\Component\ETL\Pipeline\PipelineRunner;
 use Kiboko\Component\ETL\Tests\Unit\IterableTestCase;
 use Kiboko\Component\ETL\Flow\Transformer\ColumnTrimTransformer;
