@@ -4,7 +4,8 @@ Kiboko ETL Documentation
 E... T... what?
 ---------------
 
-An ETL is a design pattern aimed at synchronization routines on large scale volumes of data.
+An ETL is a design pattern aimed at synchronization routines on large scale volumes of data. The 3 letters stand for Extract-Transform-Load.
+
 This library implements this concept in PHP with the help of `Iterator` and `Generator` objects.
 
 Terminology
@@ -19,8 +20,9 @@ Terminology
 * *Transform*: the pipeline step in charge of transformation and validation operations of the data. It can perform lookup operations in a second-level data source
 * *Load*: the pipeline step in charge of the data persistence in the data sink
 
-* *Lookup*:
-* *Validate*:
+* *Lookup*: a transformation step doing some data lookup into a secondary data source
+* *Validate*: a transformation step doing some data format 
+and integrity checks
 
 Examples
 --------
