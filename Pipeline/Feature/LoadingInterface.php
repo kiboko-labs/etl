@@ -2,7 +2,7 @@
 
 namespace Kiboko\Component\ETL\Pipeline\Feature;
 
-use Kiboko\Component\ETL\Loader\LoaderInterface;
+use Kiboko\Component\ETL\Flow\Loader\LoaderInterface;
 
 interface LoadingInterface
 {

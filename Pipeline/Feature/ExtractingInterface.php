@@ -2,7 +2,7 @@
 
 namespace Kiboko\Component\ETL\Pipeline\Feature;
 
-use Kiboko\Component\ETL\Extractor\ExtractorInterface;
+use Kiboko\Component\ETL\Flow\Extractor\ExtractorInterface;
 
 interface ExtractingInterface
 {
