@@ -2,6 +2,8 @@
 
 namespace Kiboko\Component\ETL\Flow\Extractor;
 
+use Kiboko\Component\ETL\Pipeline\GenericBucket;
+
 class PDOExtractor implements ExtractorInterface
 {
     /**
@@ -25,7 +27,7 @@ class PDOExtractor implements ExtractorInterface
         $this->preparedStatement->execute($this->arguments);
 
         foreach ($this->preparedStatement->fetch(\PDO::FETCH_ASSOC) as $line) {
-            yield $line;
+            yield new GenericBucket($line);
         }
     }
 }

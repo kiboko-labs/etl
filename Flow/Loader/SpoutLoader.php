@@ -3,6 +3,7 @@
 namespace Kiboko\Component\ETL\Flow\Loader;
 
 use Box\Spout\Writer\CSV\Writer;
+use Kiboko\Component\ETL\Pipeline\GenericBucket;
 
 class SpoutLoader implements LoaderInterface
 {
@@ -30,7 +31,7 @@ class SpoutLoader implements LoaderInterface
 
             $this->writer->addRow($line);
 
-            yield $line;
+            yield new GenericBucket($line);
         }
     }
 }
