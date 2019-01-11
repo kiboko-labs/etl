@@ -3,6 +3,7 @@
 namespace Kiboko\Component\ETL\Flow\Transformer;
 
 use Kiboko\Component\ETL\Mapper\MapperInterface;
+use Kiboko\Component\ETL\Pipeline\GenericBucket;
 
 class ArrayTransformer implements TransformerInterface
 {
@@ -29,7 +30,7 @@ class ArrayTransformer implements TransformerInterface
     public function transform(): \Generator
     {
         while ($line = yield) {
-            yield array_merge(...$this->walkMappers($line));
+            yield new GenericBucket(array_merge(...$this->walkMappers($line)));
         }
     }
 }
