@@ -5,31 +5,31 @@ namespace Kiboko\Component\ETL\Pipeline;
 class MergeBucket implements ResultBucketInterface
 {
     /**
-     * @var \Iterator[]
+     * @var ResultBucketInterface[]
      */
-    private $iterators;
+    private $buckets;
 
     /**
-     * @param \Iterator[] $iterators
+     * @param ResultBucketInterface[] $buckets
      */
-    public function __construct(\Iterator... $iterators)
+    public function __construct(ResultBucketInterface... $buckets)
     {
-        $this->iterators = $iterators;
+        $this->buckets = $buckets;
     }
 
-    public function append(\Iterator ...$iterators)
+    public function append(ResultBucketInterface ...$buckets)
     {
-        $this->iterators = array_merge(
-            $this->iterators,
-            $iterators
+        $this->buckets = array_merge(
+            $this->buckets,
+            $buckets
         );
     }
 
     public function getIterator()
     {
         $iterator = new \AppendIterator();
-        foreach ($this->iterators as $child) {
-            $iterator->append($child);
+        foreach ($this->buckets as $child) {
+            $iterator->append($child->getIterator());
         }
         return $iterator;
     }
