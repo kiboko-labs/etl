@@ -2,7 +2,7 @@
 
 namespace Kiboko\Component\ETL\Mapper;
 
-class FieldCopyMapper implements MapperInterface
+class FieldValueMapper implements MapperInterface
 {
     /**
      * @var string
@@ -10,24 +10,24 @@ class FieldCopyMapper implements MapperInterface
     private $outputField;
 
     /**
-     * @var mixed
+     * @var string
      */
-    private $value;
+    private $inputField;
 
     /**
      * @param string $outputField
-     * @param mixed  $value
+     * @param string $inputField
      */
-    public function __construct(string $outputField, $value)
+    public function __construct(string $outputField, string $inputField)
     {
         $this->outputField = $outputField;
-        $this->value = $value;
+        $this->inputField = $inputField;
     }
 
     public function map(array $input): array
     {
         return [
-            $this->outputField => $this->value,
+            $this->outputField => $input[$this->inputField],
         ];
     }
 }
