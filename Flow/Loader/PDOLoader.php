@@ -2,6 +2,7 @@
 
 namespace Kiboko\Component\ETL\Flow\Loader;
 
+use Kiboko\Component\ETL\Pipeline\EmptyBucket;
 use Kiboko\Component\ETL\Pipeline\GenericBucket;
 
 class PDOLoader implements LoaderInterface
@@ -27,9 +28,9 @@ class PDOLoader implements LoaderInterface
     public function load(): \Generator
     {
         while ($line = yield) {
-            if ($this->preparedStatement->execute(($this->fieldMapping)($line))) {
-                yield new GenericBucket($line);
-            }
+            $this->preparedStatement->execute(($this->fieldMapping)($line));
+
+            yield new GenericBucket($line);
         }
     }
 }
