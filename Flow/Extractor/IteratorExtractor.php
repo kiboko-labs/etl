@@ -5,7 +5,7 @@ namespace Kiboko\Component\ETL\Flow\Extractor;
 class IteratorExtractor implements ExtractorInterface
 {
     /**
-     * @var array
+     * @var \Traversable
      */
     private $traversable;
 
