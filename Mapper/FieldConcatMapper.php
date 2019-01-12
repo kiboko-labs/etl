@@ -2,7 +2,10 @@
 
 namespace Kiboko\Component\ETL\Mapper;
 
-class FieldConcatMapper implements MapperInterface
+use PhpParser\BuilderFactory;
+use PhpParser\Node;
+
+class FieldConcatMapper implements CompilableMapperInterface
 {
     /**
      * @var string
@@ -43,5 +46,25 @@ class FieldConcatMapper implements MapperInterface
         foreach ($this->inputFields as $field) {
             yield $input[$field];
         }
+    }
+
+    /**
+     * @return Node[]
+     */
+    public function compile(): array
+    {
+        $builder = new BuilderFactory();
+
+        return [
+            new Node\Expr\ArrayItem(
+                $builder->concat(...array_map(function($item) {
+                    return new Node\Expr\ArrayDimFetch(
+                        new Node\Expr\Variable('input'),
+                        new Node\Scalar\String_($item)
+                    );
+                }, $this->inputFields)),
+                new Node\Scalar\String_($this->outputField)
+            )
+        ];
     }
 }

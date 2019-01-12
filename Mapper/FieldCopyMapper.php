@@ -2,7 +2,10 @@
 
 namespace Kiboko\Component\ETL\Mapper;
 
-class FieldCopyMapper implements MapperInterface
+use PhpParser\BuilderFactory;
+use PhpParser\Node;
+
+class FieldCopyMapper implements CompilableMapperInterface
 {
     /**
      * @var string
@@ -28,6 +31,21 @@ class FieldCopyMapper implements MapperInterface
     {
         return [
             $this->outputField => $this->value,
+        ];
+    }
+
+    /**
+     * @return Node[]
+     */
+    public function compile(): array
+    {
+        $builder = new BuilderFactory();
+
+        return [
+            new Node\Expr\ArrayItem(
+                $builder->val($this->value),
+                new Node\Scalar\String_($this->outputField)
+            )
         ];
     }
 }

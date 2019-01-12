@@ -24,5 +24,8 @@
     "suggest": {
         "box/spout": "In order to read Excel (.xlsx) files, the box/spout package is required.",
         "ext-pdo": "In order to read and write to databases with the PDO extension."
+    },
+    "require": {
+        "nikic/php-parser": "^4.2"
     }
 }

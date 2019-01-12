@@ -2,7 +2,9 @@
 
 namespace Kiboko\Component\ETL\Mapper;
 
-class FieldValueMapper implements MapperInterface
+use PhpParser\Node;
+
+class FieldValueMapper implements CompilableMapperInterface
 {
     /**
      * @var string
@@ -28,6 +30,22 @@ class FieldValueMapper implements MapperInterface
     {
         return [
             $this->outputField => $input[$this->inputField],
+        ];
+    }
+
+    /**
+     * @return Node[]
+     */
+    public function compile(): array
+    {
+        return [
+            new Node\Expr\ArrayItem(
+                new Node\Expr\ArrayDimFetch(
+                    new Node\Expr\Variable('input'),
+                    new Node\Scalar\String_($this->inputField)
+                ),
+                new Node\Scalar\String_($this->outputField)
+            )
         ];
     }
 }
