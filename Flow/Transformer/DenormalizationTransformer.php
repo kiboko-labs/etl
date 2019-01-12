@@ -48,7 +48,7 @@ class DenormalizationTransformer implements TransformerInterface
     public function transform(): \Generator
     {
         while ($data = yield) {
-            yield new GenericBucket($this->denormalizer->denormalize($data, $this->format, $this->context));
+            yield new GenericBucket($this->denormalizer->denormalize($data, $this->class, $this->format, $this->context));
         }
     }
 }
