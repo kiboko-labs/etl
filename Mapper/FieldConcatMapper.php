@@ -55,14 +55,30 @@ class FieldConcatMapper implements CompilableMapperInterface
     {
         $builder = new BuilderFactory();
 
+        $values = [];
+
+        $it = new \ArrayIterator($this->inputFields);
+        $it->rewind();
+
+        if ($it->valid()) {
+            while (true) {
+                $values[] = new Node\Expr\ArrayDimFetch(
+                    new Node\Expr\Variable('input'),
+                    new Node\Scalar\String_($it->current())
+                );
+
+                $it->next();
+                if (!$it->valid()) {
+                    break;
+                }
+
+                $values[] = new Node\Scalar\String_($this->glue);
+            }
+        }
+
         return [
             new Node\Expr\ArrayItem(
-                $builder->concat(...array_map(function($item) {
-                    return new Node\Expr\ArrayDimFetch(
-                        new Node\Expr\Variable('input'),
-                        new Node\Scalar\String_($item)
-                    );
-                }, $this->inputFields)),
+                $builder->concat(...$values),
                 new Node\Scalar\String_($this->outputField)
             )
         ];
