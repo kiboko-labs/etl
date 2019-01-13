@@ -3,6 +3,7 @@
 namespace Kiboko\Component\ETL\Pipeline;
 
 use Kiboko\Component\ETL\Flow\Extractor\ExtractorInterface;
+use Kiboko\Component\ETL\Flow\FlushableInterface;
 use Kiboko\Component\ETL\Flow\Loader\LoaderInterface;
 use Kiboko\Component\ETL\Flow\Transformer\TransformerInterface;
 use Kiboko\Component\ETL\Pipeline\Feature\ExtractingInterface;
@@ -35,11 +36,25 @@ class Pipeline implements PipelineInterface
      */
     public function extract(ExtractorInterface $extractor): ExtractingInterface
     {
-        $this->source = new \NoRewindIterator(
-            $iterator = $extractor->extract()
-        );
+        if ($extractor instanceof FlushableInterface) {
+            $iterator = new \AppendIterator();
 
-        $iterator->rewind();
+            $iterator->append(
+                $main = $extractor->extract()
+            );
+
+            $iterator->append((function(FlushableInterface $flushable) {
+                yield from $flushable->flush();
+            })($extractor));
+
+            $main->rewind();
+        } else {
+            $iterator = $extractor->extract();
+
+            $iterator->rewind();
+        }
+
+        $this->source = new \NoRewindIterator($iterator);
 
         return $this;
     }
@@ -51,11 +66,25 @@ class Pipeline implements PipelineInterface
      */
     public function transform(TransformerInterface $transformer): TransformingInterface
     {
-        $this->source = new \NoRewindIterator(
-            $iterator = $this->runner->run($this->source, $transformer->transform())
-        );
+        if ($transformer instanceof FlushableInterface) {
+            $iterator = new \AppendIterator();
 
-        $iterator->rewind();
+            $iterator->append(
+                $main = $this->runner->run($this->source, $transformer->transform())
+            );
+
+            $iterator->append((function(FlushableInterface $flushable) {
+                yield from $flushable->flush();
+            })($transformer));
+
+            $main->rewind();
+        } else {
+            $iterator = $this->runner->run($this->source, $transformer->transform());
+
+            $iterator->rewind();
+        }
+
+        $this->source = new \NoRewindIterator($iterator);
 
         return $this;
     }
@@ -67,14 +96,57 @@ class Pipeline implements PipelineInterface
      */
     public function load(LoaderInterface $loader): LoadingInterface
     {
-        $this->source = new \NoRewindIterator(
-            $iterator = $this->runner->run($this->source, $loader->load())
-        );
+        if ($loader instanceof FlushableInterface) {
+            $iterator = new \AppendIterator();
 
-        $iterator->rewind();
+            $iterator->append(
+                $main = $this->runner->run($this->source, $loader->load())
+            );
+
+            $iterator->append((function(FlushableInterface $flushable) {
+                yield from $flushable->flush();
+            })($loader));
+
+            $main->rewind();
+        } else {
+            $iterator = $this->runner->run($this->source, $loader->load());
+
+            $iterator->rewind();
+        }
+
+        $this->source = new \NoRewindIterator($iterator);
 
         return $this;
     }
+/*
+    private function doRun(\Generator $subject)
+    {
+        $this->source = new \NoRewindIterator(
+            $iterator = $this->runner->run($this->source, $subject)
+        );
+
+        $iterator->rewind();
+    }
+
+    private function doRunWithFlush(\Generator $subject, FlushableInterface $flushable)
+    {
+        $this->doRun($subject);
+
+        $iterator = new \AppendIterator();
+
+        $iterator->append(
+            $main = $this->runner->run($this->source, $subject)
+        );
+
+        $main->rewind();
+
+        $iterator->append((function(FlushableInterface $flushable) {
+            yield $flushable->flush();
+        })($flushable));
+
+        $this->source = new \NoRewindIterator($iterator);
+    }
+*/
 
     /**
      * @param callable $reduce
