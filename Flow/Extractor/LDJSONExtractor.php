@@ -22,12 +22,8 @@ class LDJSONExtractor implements ExtractorInterface
      */
     public function extract(): \Generator
     {
-        if ($this->file->eof()) {
-            return;
-        }
-
         while (!$this->file->eof()) {
-            yield json_decode($this->file->fgets(), JSON_OBJECT_AS_ARRAY);
+            yield json_decode($this->file->fgets(), true);
         }
     }
 }
