@@ -2,6 +2,8 @@
 
 namespace Kiboko\Component\ETL\Pipeline;
 
+use Kiboko\Component\ETL\Exception\UnexpectedYieldedValueType;
+
 class PipelineRunner implements PipelineRunnerInterface
 {
     public function fork(callable $reduce, \Iterator $source, \Generator ...$async): \Iterator
@@ -73,13 +75,11 @@ class PipelineRunner implements PipelineRunnerInterface
             $bucket = $generator->send($iterator->current());
 
             if (!$bucket instanceof ResultBucketInterface) {
-                throw new \UnexpectedValueException(strtr(
-                    'Invalid yielded data, was expecting %expected%, got %actual%.',
-                    [
-                        '%expected%' => ResultBucketInterface::class,
-                        '%actual%' => is_object($bucket) ? get_class($bucket) : gettype($bucket),
-                    ]
-                ));
+                throw UnexpectedYieldedValueType::expectingType(
+                    $generator,
+                    ResultBucketInterface::class,
+                    $bucket
+                );
             }
 
             yield from $bucket;

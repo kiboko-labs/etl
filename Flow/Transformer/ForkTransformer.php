@@ -2,6 +2,7 @@
 
 namespace Kiboko\Component\ETL\Flow\Transformer;
 
+use Kiboko\Component\ETL\Exception\UnexpectedYieldedValueType;
 use Kiboko\Component\ETL\Pipeline\MergeBucket;
 use Kiboko\Component\ETL\Pipeline\ResultBucketInterface;
 
@@ -42,20 +43,11 @@ class ForkTransformer implements TransformerInterface
                 $bucket = $coroutine->current();
 
                 if (!$bucket instanceof ResultBucketInterface) {
-                    $re = new \ReflectionGenerator($coroutine);
-
-                    throw new \UnexpectedValueException(strtr(
-                        'Invalid yielded data, was expecting %expected%, got %actual%. Coroutine declared in %function%, running in %file%:%line%.',
-                        [
-                            '%expected%' => ResultBucketInterface::class,
-                            '%actual%' => is_object($bucket) ? get_class($bucket) : gettype($bucket),
-                            '%function%' => $re->getFunction() instanceof \ReflectionMethod ?
-                                $re->getFunction()->getDeclaringClass()->getName() . '::' . $re->getFunction()->getName() :
-                                $re->getFunction()->getName(),
-                            '%file%' => $re->getExecutingFile(),
-                            '%line%' => $re->getExecutingLine(),
-                        ]
-                    ));
+                    throw UnexpectedYieldedValueType::expectingType(
+                        $coroutine,
+                        ResultBucketInterface::class,
+                        $bucket
+                    );
                 }
 
                 $mergeBucket->append($bucket);
