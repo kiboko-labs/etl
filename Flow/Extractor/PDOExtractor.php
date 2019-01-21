@@ -28,7 +28,7 @@ class PDOExtractor implements ExtractorInterface
 
         $this->preparedStatement->setFetchMode(\PDO::FETCH_ASSOC);
         foreach ($this->preparedStatement as $line) {
-            yield new GenericBucket($line);
+            yield $line;
         }
     }
 }

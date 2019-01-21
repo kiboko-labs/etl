@@ -22,9 +22,8 @@ class CallableTransformer implements TransformerInterface
 
     public function transform(): \Generator
     {
-        $callback = $this->callback;
         while ($line = yield) {
-            yield new GenericBucket($callback($line));
+            yield new GenericBucket(($this->callback)($line));
         }
     }
 }

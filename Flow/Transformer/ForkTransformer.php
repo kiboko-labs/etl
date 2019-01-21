@@ -3,6 +3,7 @@
 namespace Kiboko\Component\ETL\Flow\Transformer;
 
 use Kiboko\Component\ETL\Pipeline\MergeBucket;
+use Kiboko\Component\ETL\Pipeline\ResultBucketInterface;
 
 class ForkTransformer implements TransformerInterface
 {
@@ -24,17 +25,48 @@ class ForkTransformer implements TransformerInterface
         /** @var \Generator[] $coroutines */
         $coroutines = [];
         foreach ($this->transformers as $transformer) {
-            $coroutines[] = $transformer->transform();
+            $coroutine = $coroutines[] = $transformer->transform();
+            $coroutine->rewind();
         }
 
         while ($line = yield) {
-            $bucket = new MergeBucket();
+            $mergeBucket = new MergeBucket();
 
             foreach ($coroutines as $coroutine) {
-                $bucket->append($coroutine->send($line));
+                $coroutine->send($line);
+
+                if (!$coroutine->valid()) {
+                    break;
+                }
+
+                $bucket = $coroutine->current();
+
+                if (!$bucket instanceof ResultBucketInterface) {
+                    $re = new \ReflectionGenerator($coroutine);
+
+                    throw new \UnexpectedValueException(strtr(
+                        'Invalid yielded data, was expecting %expected%, got %actual%. Coroutine declared in %function%, running in %file%:%line%.',
+                        [
+                            '%expected%' => ResultBucketInterface::class,
+                            '%actual%' => is_object($bucket) ? get_class($bucket) : gettype($bucket),
+                            '%function%' => $re->getFunction() instanceof \ReflectionMethod ?
+                                $re->getFunction()->getDeclaringClass()->getName() . '::' . $re->getFunction()->getName() :
+                                $re->getFunction()->getName(),
+                            '%file%' => $re->getExecutingFile(),
+                            '%line%' => $re->getExecutingLine(),
+                        ]
+                    ));
+                }
+
+                $mergeBucket->append($bucket);
+
+                $coroutine->next();
+                if (!$coroutine->valid()) {
+                    break;
+                }
             }
 
-            yield $bucket;
+            yield $mergeBucket;
         }
     }
 }

@@ -46,12 +46,8 @@ class Pipeline implements PipelineInterface
             $iterator->append((function(FlushableInterface $flushable) {
                 yield from $flushable->flush();
             })($extractor));
-
-            $main->rewind();
         } else {
             $iterator = $extractor->extract();
-
-            $iterator->rewind();
         }
 
         $this->source = new \NoRewindIterator($iterator);
@@ -76,12 +72,8 @@ class Pipeline implements PipelineInterface
             $iterator->append((function(FlushableInterface $flushable) {
                 yield from $flushable->flush();
             })($transformer));
-
-            $main->rewind();
         } else {
             $iterator = $this->runner->run($this->source, $transformer->transform());
-
-            $iterator->rewind();
         }
 
         $this->source = new \NoRewindIterator($iterator);
@@ -106,12 +98,8 @@ class Pipeline implements PipelineInterface
             $iterator->append((function(FlushableInterface $flushable) {
                 yield from $flushable->flush();
             })($loader));
-
-            $main->rewind();
         } else {
             $iterator = $this->runner->run($this->source, $loader->load());
-
-            $iterator->rewind();
         }
 
         $this->source = new \NoRewindIterator($iterator);
