@@ -18,11 +18,6 @@ class CompiledMapper implements MapperInterface
     private $compilationContext;
 
     /**
-     * @var MapperInterface[]
-     */
-    private $mappers;
-
-    /**
      * @var MapperInterface
      */
     private $compiledMapper;

@@ -64,7 +64,9 @@ class Compiler
                         ->setReturnType('array')
                         ->addParam($factory->param('input')->setType('array'))
                         ->addStmt(new Node\Stmt\Return_(
-                            new Node\Expr\Array_($trees)
+                            new Node\Expr\Array_($trees, [
+                                'kind' => Node\Expr\Array_::KIND_SHORT
+                            ])
                         ))
                     )
                 )

@@ -4,7 +4,7 @@ namespace Kiboko\Component\ETL\Mapper;
 
 use PhpParser\Node;
 
-class FieldValueMapper implements CompilableMapperInterface
+class FieldCopyValueMapper implements CompilableMapperInterface
 {
     /**
      * @var string
@@ -29,7 +29,7 @@ class FieldValueMapper implements CompilableMapperInterface
     public function map(array $input): array
     {
         return [
-            $this->outputField => $input[$this->inputField],
+            $this->outputField => $input[$this->inputField] ?? null,
         ];
     }
 
@@ -40,9 +40,14 @@ class FieldValueMapper implements CompilableMapperInterface
     {
         return [
             new Node\Expr\ArrayItem(
-                new Node\Expr\ArrayDimFetch(
-                    new Node\Expr\Variable('input'),
-                    new Node\Scalar\String_($this->inputField)
+                new Node\Expr\BinaryOp\Coalesce(
+                    new Node\Expr\ArrayDimFetch(
+                        new Node\Expr\Variable('input'),
+                        new Node\Scalar\String_($this->inputField)
+                    ),
+                   new Node\Expr\ConstFetch(
+                       new Node\Name('null')
+                   )
                 ),
                 new Node\Scalar\String_($this->outputField)
             )

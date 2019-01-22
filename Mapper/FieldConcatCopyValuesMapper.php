@@ -5,7 +5,7 @@ namespace Kiboko\Component\ETL\Mapper;
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
 
-class FieldConcatMapper implements CompilableMapperInterface
+class FieldConcatCopyValuesMapper implements CompilableMapperInterface
 {
     /**
      * @var string
