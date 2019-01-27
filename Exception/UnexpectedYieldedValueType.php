@@ -18,7 +18,7 @@ class UnexpectedYieldedValueType extends \UnexpectedValueException
         parent::__construct($message, $code, $previous);
     }
 
-    public static function expectingType(\Generator $coroutine, string $expectedType, $actual, ?\Exception $previous = null): self
+    public static function expectingType(\Generator $coroutine, string $expectedType, $actual, int $code = null, ?\Exception $previous = null): self
     {
         $re = new \ReflectionGenerator($coroutine);
 
@@ -38,7 +38,9 @@ class UnexpectedYieldedValueType extends \UnexpectedValueException
                 '%function%' => $functionName,
                 '%file%' => $re->getExecutingFile(),
                 '%line%' => $re->getExecutingLine(),
-            ]
+            ],
+            $code,
+            $previous
         ));
     }
 }
