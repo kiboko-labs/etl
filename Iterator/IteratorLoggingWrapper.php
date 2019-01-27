@@ -56,22 +56,32 @@ class IteratorLoggingWrapper implements \Iterator
     {
         try {
             $message = 'Wrapped %type%->%iter% [%object%]: ';
-            $function = $this->reflectionGenerator->getFunction();
-            $functionName = $function->getName();
+            if ($this->reflectionGenerator !== null) {
+                $function = $this->reflectionGenerator->getFunction();
+                $functionName = $function->getName();
 
-            if ($function instanceof \ReflectionMethod) {
-                $class = $function->getDeclaringClass();
-                $functionName = $class->getName() . '::' . $function->getName();
+                if ($function instanceof \ReflectionMethod) {
+                    $class = $function->getDeclaringClass();
+                    $functionName = $class->getName() . '::' . $function->getName();
+                }
+
+                $options = [
+                    'iter' => $calledMethod,
+                    'object' => spl_object_hash($this->wrapped),
+                    'function' => var_export($functionName, true),
+                    'file' => var_export($this->reflectionGenerator->getExecutingFile(), true),
+                    'line' => var_export($this->reflectionGenerator->getExecutingLine(), true),
+                    'type' => $this->wrapped instanceof \Generator ? 'generator' : 'iterator',
+                ];
+            } else {
+                $message = 'Wrapped %type%->%iter% [%object%]: [terminated] ';
+
+                $options = [
+                    'iter' => $calledMethod,
+                    'object' => spl_object_hash($this->wrapped),
+                    'type' => $this->wrapped instanceof \Generator ? 'generator' : 'iterator',
+                ];
             }
-
-            $options = [
-                'iter' => $calledMethod,
-                'object' => spl_object_hash($this->wrapped),
-                'function' => var_export($functionName, true),
-                'file' => var_export($this->reflectionGenerator->getExecutingFile(), true),
-                'line' => var_export($this->reflectionGenerator->getExecutingLine(), true),
-                'type' => $this->wrapped instanceof \Generator ? 'generator' : 'iterator',
-            ];
         } catch (\ReflectionException $e) {
             $message = 'Wrapped %type%->%iter% [%object%]: [terminated] ';
 

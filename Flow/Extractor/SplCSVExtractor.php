@@ -60,7 +60,8 @@ class SplCSVExtractor implements ExtractorInterface
             $lineColumnsCount = count($line);
             ++$lineNumber;
 
-            if ($lineColumnsCount <> $columnsCount) {
+            if ($lineColumnsCount !== $columnsCount) {
+                continue;
                 throw new \RuntimeException(strtr(
                     'The line %line% does not contain the same amount of columns than the first line.',
                     [
