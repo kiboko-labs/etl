@@ -30,17 +30,19 @@ class UnexpectedYieldedValueType extends \UnexpectedValueException
             $functionName = $class->getName() . '::' . $functionName;
         }
 
-        return new self($coroutine, strtr(
-            'Invalid yielded data, was expecting %expected%, got %actual%. Coroutine declared in %function%, running in %file%:%line%.',
-            [
-                '%expected%' => $expectedType,
-                '%actual%' => is_object($actual) ? get_class($actual) : gettype($actual),
-                '%function%' => $functionName,
-                '%file%' => $re->getExecutingFile(),
-                '%line%' => $re->getExecutingLine(),
-            ],
+        return new self($coroutine,
+            strtr(
+                'Invalid yielded data, was expecting %expected%, got %actual%. Coroutine declared in %function%, running in %file%:%line%.',
+                [
+                    '%expected%' => $expectedType,
+                    '%actual%' => is_object($actual) ? get_class($actual) : gettype($actual),
+                    '%function%' => $functionName,
+                    '%file%' => $re->getExecutingFile(),
+                    '%line%' => $re->getExecutingLine(),
+                ]
+            ),
             $code,
             $previous
-        ));
+        );
     }
 }
