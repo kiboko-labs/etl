@@ -1,9 +1,19 @@
 Extractors
 ==========
 
+* Read from an [`array`](#arrayextractor)
+* Read from an [`Iterator`](#iteratorextractor)
+* Read from a [LD JSON stream](#ldjsonextractor)
+* Read from a [SQL database](#pdoextractor)
+* Read from a CSV file
+  * using [the SPL](#splcsvextractor)
+  * using [`box/spout` component](#spoutcsvextractor)
+
 `ArrayExtractor`
 ----------------
-Red data from a PHP array.
+
+Use the array extractor in order to read data from a PHP array, 
+where each item will be considered as a line.
 
 ```php
 <?php
@@ -24,7 +34,8 @@ $pipeline
 `IteratorExtractor`
 -------------------
 
-Read data from an iterator.
+Use the iterator extractor to read data from an iterator,
+each item will be considered as a line.
 
 ```php
 <?php
@@ -42,7 +53,8 @@ $pipeline
 `LDJSONExtractor`
 -----------------
 
-Read line delimited JSON files using the SPL.
+Read line delimited JSON files using the SPL,
+each line of the LD JSON will be considered as a line.
 
 ```php
 <?php
@@ -60,7 +72,8 @@ $pipeline
 `PDOExtractor`
 --------------
 
-Read data from a PDO statement result.
+Read data from a PDO statement result,
+in other words run SQL queries each result will be considered as a line.
 
 ```php
 <?php
@@ -83,7 +96,10 @@ $pipeline
 `SplCSVExtractor`
 -----------------
 
-Read CSV files using the SPL.
+Read CSV files using the SPL,
+each line of the CSV will be considered as a line.
+
+The first line will be considered as holding the field names for the whole file.
 
 ```php
 <?php
@@ -100,7 +116,10 @@ $pipeline
 `SpoutCsvExtractor`
 -------------------
 
-Use `box/spout` component to read CSV files with no abstraction.
+Read CSV files using the `box/spout component,
+each line of the CSV will be considered as a line.
+
+The first line will be considered as holding the field names for the whole file.
 
 ```php
 <?php
@@ -117,7 +136,12 @@ $pipeline
 `SpoutSheetExtractor`
 ---------------------
 
-Use `box/spout` component to read CSV, Excel and ODS files.
+Use `box/spout` component to read spreadsheets including CSV, Excel and ODS files,
+each line of the sheet will be considered as a line.
+
+The 2nd parameter of the constructor can determine the number of lines to skip, if needed.
+
+The next line will be considered as holding the field names for the whole file.
 
 ```php
 <?php

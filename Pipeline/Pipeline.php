@@ -106,52 +106,6 @@ class Pipeline implements PipelineInterface
 
         return $this;
     }
-/*
-    private function doRun(\Generator $subject)
-    {
-        $this->source = new \NoRewindIterator(
-            $iterator = $this->runner->run($this->source, $subject)
-        );
-
-        $iterator->rewind();
-    }
-
-    private function doRunWithFlush(\Generator $subject, FlushableInterface $flushable)
-    {
-        $this->doRun($subject);
-
-        $iterator = new \AppendIterator();
-
-        $iterator->append(
-            $main = $this->runner->run($this->source, $subject)
-        );
-
-        $main->rewind();
-
-        $iterator->append((function(FlushableInterface $flushable) {
-            yield $flushable->flush();
-        })($flushable));
-
-        $this->source = new \NoRewindIterator($iterator);
-    }
-*/
-
-    /**
-     * @param callable $reduce
-     * @param ForkBuilderInterface[] $forkBuilders
-     *
-     * @return $this
-     */
-    public function fork(callable $reduce, ForkBuilderInterface ...$forkBuilders): ForkingInterface
-    {
-        $forks = array_map(function(ForkBuilderInterface $builder) {
-            yield from ($builder($this->runner, $this->source))->walk();
-        }, $forkBuilders);
-
-        $this->source = $this->runner->await($reduce, $this->source, ...$forks);
-
-        return $this;
-    }
 
     /**
      * @return \Iterator

@@ -5,7 +5,7 @@ namespace Kiboko\Component\ETL\Flow\Transformer;
 use Kiboko\Component\ETL\Pipeline\GenericBucket;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class NormalizationMapping implements TransformerInterface
+class NormalizationTransformer implements TransformerInterface
 {
     /**
      * @var NormalizerInterface

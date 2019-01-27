@@ -17,12 +17,11 @@ Terminology
 * *[Pipeline](pipeline.md)*: a suite of steps executed sequentially
 * *Pipeline Step*: an unitary operation executed by a pipeline
 * *[Extract](extractors.md)*: the pipeline step in charge of reading the raw data source
-* *Transform*: the pipeline step in charge of transformation and validation operations of the data. It can perform lookup operations in a second-level data source
+* *[Transform](transformers.md)*: the pipeline step in charge of transformation and validation operations of the data. It can perform lookup operations in a second-level data source
 * *Load*: the pipeline step in charge of the data persistence in the data sink
 
 * *Lookup*: a transformation step doing some data lookup into a secondary data source
-* *Validate*: a transformation step doing some data format 
-and integrity checks
+* *Validate*: a transformation step doing some data format and integrity checks
 
 
 
