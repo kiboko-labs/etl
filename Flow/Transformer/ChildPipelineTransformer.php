@@ -41,7 +41,7 @@ class ChildPipelineTransformer implements TransformerInterface
             new IteratorExtractor(
                 $iterator = new AppendableBucket()
             )
-        )
+        );
 
         ($this->builder)($pipeline);
 
