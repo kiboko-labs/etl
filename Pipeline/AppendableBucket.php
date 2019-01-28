@@ -27,8 +27,6 @@ class AppendableBucket implements ResultBucketInterface
 
     public function getIterator()
     {
-        return new \ArrayIterator([
-            $this->values
-        ]);
+        return new \ArrayIterator($this->values);
     }
 }
