@@ -58,6 +58,31 @@ $pipeline
 `CallableTransformer`
 ---------------------
 
+`ChildPipelineTransformer`
+--------------------------
+
+```php
+<?php
+use Kiboko\Component\ETL\Flow\Transformer;
+use Kiboko\Component\ETL\Pipeline\PipelineInterface;
+use Kiboko\Component\ETL\Pipeline\PipelineRunnerInterface;
+
+/** @var PipelineInterface $pipeline */
+/** @var PipelineRunnerInterface $runner */
+
+$pipeline
+    ->transform(new Transformer\ChildPipelineTransformer(
+        $runner,
+        function(PipelineInterface $pipeline) {
+            $pipeline
+                ->transform(new FooTransformer())
+                ->load(new FooLoader())
+            ;
+        }
+    ));
+
+```
+
 `ColumnTrimTransformer`
 -----------------------
 
