@@ -45,9 +45,9 @@ class FieldCopyValueMapper implements CompilableMapperInterface
                         new Node\Expr\Variable('input'),
                         new Node\Scalar\String_($this->inputField)
                     ),
-                   new Node\Expr\ConstFetch(
-                       new Node\Name('null')
-                   )
+                    new Node\Expr\ConstFetch(
+                        new Node\Name('null')
+                    )
                 ),
                 new Node\Scalar\String_($this->outputField)
             )

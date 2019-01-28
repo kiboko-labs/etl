@@ -3,11 +3,16 @@ Extractors
 
 * Read from an [`array`](#arrayextractor)
 * Read from an [`Iterator`](#iteratorextractor)
-* Read from a [LD JSON stream](#ldjsonextractor)
-* Read from a [SQL database](#pdoextractor)
-* Read from a CSV file
+* Read from a [*LD JSON* stream](#ldjsonextractor)
+* Read from a [*SQL* database](#pdoextractor)
+* Read from a *CSV* file
   * using [the SPL](#splcsvextractor)
-  * using [`box/spout` component](#spoutcsvextractor)
+  * using [`box/spout` readers](#spoutcsvextractor)
+  * using [`box/spout` sheets](#spoutsheetextractor)
+* Read from an *Excel* (.xlsx)file
+  * using [`box/spout` sheets](#spoutsheetextractor)
+* Read from an *OpenDocument* stylesheet (.ods) file
+  * using [`box/spout` sheets](#spoutsheetextractor)
 
 `ArrayExtractor`
 ----------------
