@@ -33,7 +33,7 @@ class LookupTransformer implements TransformerInterface
     {
         while ($line = yield) {
             if ($line !== null) {
-                yield new GenericBucket(($this->callback)($line, $this->statement));
+                yield ($this->callback)($line, $this->statement);
             } else {
                 yield new EmptyBucket();
             }
