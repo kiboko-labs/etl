@@ -48,7 +48,9 @@ class SplCSVSafeLoader implements LoaderInterface
     {
         $isFirstLine = true;
         $headers = [];
-        while ($line = yield) {
+        while (true) {
+            $line = yield;
+
             if ($isFirstLine === true) {
                 $this->file->fputcsv($headers = array_keys($line), $this->delimiter, $this->enclosure, $this->escape);
                 $isFirstLine = false;

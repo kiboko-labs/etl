@@ -32,7 +32,9 @@ class BatchingTransformer implements TransformerInterface, FlushableInterface
     {
         $this->bucket = new AppendableBucket();
         $itemCount = 0;
-        while ($line = yield) {
+        while (true) {
+            $line = yield;
+
             $this->bucket->append($line);
 
             if ($this->batchSize <= ++$itemCount) {

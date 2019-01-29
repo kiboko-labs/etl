@@ -27,7 +27,9 @@ class PDOLoader implements LoaderInterface
 
     public function load(): \Generator
     {
-        while ($line = yield) {
+        while (true) {
+            $line = yield;
+
             $this->preparedStatement->execute(($this->fieldMapping)($line));
 
             yield new GenericBucket($line);

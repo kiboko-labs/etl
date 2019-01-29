@@ -23,7 +23,9 @@ class SpoutLoader implements LoaderInterface
     public function load(): \Generator
     {
         $isFirstLine = true;
-        while ($line = yield) {
+        while (true) {
+            $line = yield;
+
             if ($isFirstLine === true) {
                 $this->writer->addRow(array_keys($line));
                 $isFirstLine = false;

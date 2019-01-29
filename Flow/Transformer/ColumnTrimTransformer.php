@@ -21,7 +21,9 @@ class ColumnTrimTransformer implements TransformerInterface
 
     public function transform(): \Generator
     {
-        while ($line = yield) {
+        while (true) {
+            $line = yield;
+
             foreach ($this->columnsToTrim as $column) {
                 if (!isset($line[$column])) {
                     continue;

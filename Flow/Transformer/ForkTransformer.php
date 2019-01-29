@@ -30,7 +30,9 @@ class ForkTransformer implements TransformerInterface
             $coroutine->rewind();
         }
 
-        while ($line = yield) {
+        while (true) {
+            $line = yield;
+
             $mergeBucket = new MergeBucket();
 
             foreach ($coroutines as $coroutine) {

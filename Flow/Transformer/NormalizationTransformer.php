@@ -36,7 +36,9 @@ class NormalizationTransformer implements TransformerInterface
 
     public function transform(): \Generator
     {
-        while ($data = yield) {
+        while (true) {
+            $data = yield;
+
             yield new GenericBucket($this->normalizer->normalize($data, $this->format, $this->context));
         }
     }

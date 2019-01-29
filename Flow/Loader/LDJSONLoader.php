@@ -21,7 +21,9 @@ class LDJSONLoader implements LoaderInterface
 
     public function load(): \Generator
     {
-        while ($line = yield) {
+        while (true) {
+            $line = yield;
+
             $this->file->fwrite(json_encode($line) . "\n");
 
             yield new GenericBucket($line);

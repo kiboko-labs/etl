@@ -20,11 +20,31 @@ class ColumnTrimTransformerTest extends IterableTestCase
                 [
                     'foo' => 'lorem',
                     'bar' => '  ipsum',
+                    'baz' => '  dolor  ',
+                ],
+                [
+                    'foo' => 'lorem',
+                    'bar' => 'ipsum  ',
+                    'baz' => '  dolor  ',
+                ],
+                [
+                    'foo' => 'lorem',
+                    'bar' => '  ipsum',
                     'baz' => 'dolor',
-                ]
+                ],
             ]),
             $pipelineRunner->run(
                 (function() {
+                    yield [
+                        'foo' => '  lorem  ',
+                        'bar' => '  ipsum',
+                        'baz' => '  dolor  ',
+                    ];
+                    yield [
+                        'foo' => '  lorem  ',
+                        'bar' => 'ipsum  ',
+                        'baz' => '  dolor  ',
+                    ];
                     yield [
                         'foo' => '  lorem  ',
                         'bar' => '  ipsum',

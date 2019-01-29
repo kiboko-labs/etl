@@ -29,6 +29,47 @@ class Pipeline implements PipelineInterface
         $this->runner = $runner;
     }
 
+    public function fork(callable ...$builders)
+    {
+        $sources = [];
+        $pipelines = [];
+        foreach ($builders as $builder) {
+            $sources[] = $source = new \SplQueue();
+            $source->setIteratorMode(\SplDoublyLinkedList::IT_MODE_DELETE);
+
+            $builder($pipeline = new Pipeline($this->runner, $source));
+
+            $pipelines[] = $iterator = $pipeline->walk();
+            $iterator->rewind();
+        }
+
+        $this->source = $this->runner->run($this->source, (function(array $pipelines, array $sources) {
+            while (true) {
+                $line = yield;
+
+                /** @var \SplQueue $source */
+                foreach ($sources as $source) {
+                    $source->enqueue($line);
+                }
+
+                $bucket = new AppendableBucket();
+                foreach ($pipelines as $pipeline) {
+                    $bucket->append(...$this->splat($pipeline));
+                }
+
+                yield $bucket;
+            }
+        })($pipelines, $sources));
+    }
+
+    private function splat(\Iterator $iterator)
+    {
+        while ($iterator->valid()) {
+            yield $iterator->current();
+            $iterator->next();
+        }
+    }
+
     /**
      * @param ExtractorInterface $extractor
      *

@@ -47,7 +47,9 @@ class SplCSVLoader implements LoaderInterface
     public function load(): \Generator
     {
         $isFirstLine = true;
-        while ($line = yield) {
+        while (true) {
+            $line = yield;
+
             if ($isFirstLine === true) {
                 $this->file->fputcsv(array_keys($line), $this->delimiter, $this->enclosure, $this->escape);
                 $isFirstLine = false;

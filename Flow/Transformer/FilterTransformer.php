@@ -23,7 +23,9 @@ class FilterTransformer implements TransformerInterface
     public function transform(): \Generator
     {
         $callback = $this->callback;
-        while ($line = yield) {
+        while (true) {
+            $line = yield;
+
             if (!$callback($line)) {
                 yield new EmptyBucket();
                 continue;
