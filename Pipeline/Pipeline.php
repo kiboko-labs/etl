@@ -11,7 +11,7 @@ use Kiboko\Component\ETL\Pipeline\Feature\ForkingInterface;
 use Kiboko\Component\ETL\Pipeline\Feature\LoadingInterface;
 use Kiboko\Component\ETL\Pipeline\Feature\TransformingInterface;
 
-class Pipeline implements PipelineInterface
+class Pipeline implements PipelineInterface, ForkingInterface
 {
     /**
      * @var iterable
@@ -29,7 +29,7 @@ class Pipeline implements PipelineInterface
         $this->runner = $runner;
     }
 
-    public function fork(callable ...$builders)
+    public function fork(callable ...$builders): ForkingInterface
     {
         $sources = [];
         $pipelines = [];
@@ -60,6 +60,8 @@ class Pipeline implements PipelineInterface
                 yield $bucket;
             }
         })($pipelines, $sources));
+
+        return $this;
     }
 
     private function splat(\Iterator $iterator)
