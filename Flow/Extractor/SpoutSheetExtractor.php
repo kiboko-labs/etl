@@ -45,17 +45,10 @@ class SpoutSheetExtractor implements ExtractorInterface
             $line = $iterator->current();
             $cellCount = count($line);
 
-            if ($columnCount < $cellCount) {
-                throw new \RuntimeException(strtr(
-                    'The columns and cell counts read from the line %line% does not match. Expected %expected% cells, got %actual%.',
-                    [
-                        '%line%' => $currentLine,
-                        '%expected%' => $columnCount,
-                        '%actual%' => $cellCount,
-                    ]
-                ));
-            } else if ($columnCount > $cellCount) {
+            if ($columnCount > $cellCount) {
                 $line = array_pad($line, $columnCount, null);
+            } else if ($columnCount < $cellCount) {
+                $line = array_slice($line, 0, $columnCount);
             }
 
             yield array_combine($columns, $line);
