@@ -10,4 +10,4 @@ This library implements this concept in PHP with the help of `Iterator`s and `Ge
 Documentation and examples
 --------------------------
 
-Check [Documentaiton page](docs/index.md) to get more information about how to use this ETL component.
+Check [Documentation page](docs/index.md) to get more information about how to use this ETL component.
