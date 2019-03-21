@@ -46,12 +46,12 @@ class SpoutSheetExtractor implements ExtractorInterface
             $cellCount = count($line);
 
             if ($columnCount > $cellCount) {
-                $line = array_pad($line, $columnCount, null);
+                $line = array_pad($line, $columnCount, '');
             } else if ($columnCount < $cellCount) {
                 $line = array_slice($line, 0, $columnCount);
             }
 
-            yield array_combine($columns, $line);
+            yield array_combine($columns, array_map('trim', $line));
 
             $iterator->next();
             $currentLine++;
