@@ -47,11 +47,13 @@ class SplCSVExtractor implements ExtractorInterface
      */
     public function extract(): \Generator
     {
+        $this->cleanBom();
+        
         if ($this->file->eof()) {
             return;
         }
 
-        $columns = $this->removeBOM($this->file->fgetcsv($this->delimiter, $this->enclosure, $this->escape));
+        $columns = $this->file->fgetcsv($this->delimiter, $this->enclosure, $this->escape);
 
         $columnsCount = count($columns);
 
@@ -75,13 +77,11 @@ class SplCSVExtractor implements ExtractorInterface
         }
     }
 
-    private function removeBOM($payload)
+    public function cleanBom()
     {
-        foreach($payload as $key=> $val) {
-            $bom = pack('H*','EFBBBF');
-            $val = preg_replace("/^$bom/", '', $val);
-            $payload[$key] = $val;
+        $bom = $this->file-> fread(3);
+        if (!preg_match('/^\\xEF\\xBB\\xBF$/', $bom)) {
+            $this->file-> seek(0);
         }
-        return $payload;
     }
 }
