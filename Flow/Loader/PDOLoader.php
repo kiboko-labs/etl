@@ -30,7 +30,10 @@ class PDOLoader implements LoaderInterface
         while (true) {
             $line = yield;
 
-            $this->preparedStatement->execute(($this->fieldMapping)($line));
+            $parameters = ($this->fieldMapping)($line);
+            if (isset($parameters)) {
+                $this->preparedStatement->execute($parameters);
+            }
 
             yield new GenericBucket($line);
         }
