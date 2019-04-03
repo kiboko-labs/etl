@@ -51,7 +51,8 @@ class SplCSVExtractor implements ExtractorInterface
             return;
         }
 
-        $columns = $this->file->fgetcsv($this->delimiter, $this->enclosure, $this->escape);
+        $columns = $this->removeBOM($this->file->fgetcsv($this->delimiter, $this->enclosure, $this->escape));
+
         $columnsCount = count($columns);
 
         $lineNumber = 0;
@@ -72,5 +73,15 @@ class SplCSVExtractor implements ExtractorInterface
 
             yield array_combine($columns, $line);
         }
+    }
+
+    private function removeBOM($payload)
+    {
+        foreach($payload as $key=> $val) {
+            $bom = pack('H*','EFBBBF');
+            $val = preg_replace("/^$bom/", '', $val);
+            $payload[$key] = $val;
+        }
+        return $payload;
     }
 }
