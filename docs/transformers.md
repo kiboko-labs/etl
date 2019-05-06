@@ -61,6 +61,10 @@ $pipeline
 `ChildPipelineTransformer`
 --------------------------
 
+In order to create an isolated pipeline chain, 
+
+[See `ForkTransformer`](#forktransformer)
+
 ```php
 <?php
 use Kiboko\Component\ETL\Flow\Transformer;
@@ -96,6 +100,8 @@ $pipeline
 
 `ForkTransformer`
 -----------------
+
+[See `ChildPipelineTransformer`](#childpipelinetransformer)
 
 `LookupTransformer`
 -------------------

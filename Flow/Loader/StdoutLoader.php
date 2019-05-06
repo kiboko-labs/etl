@@ -2,17 +2,15 @@
 
 namespace Kiboko\Component\ETL\Flow\Loader;
 
-use Kiboko\Component\ETL\Pipeline\GenericBucket;
-
-class StdoutLoader implements LoaderInterface
+class StdoutLoader extends StreamLoader
 {
-    public function load(): \Generator
+    public function __construct()
     {
-        while (true) {
-            $line = yield;
+        parent::__construct(STDOUT);
+    }
 
-            file_put_contents('php://stdout', var_export($line, true) . PHP_EOL);
-            yield new GenericBucket($line);
-        }
+    protected function formatLine($line)
+    {
+        return var_export($line, true) . PHP_EOL;
     }
 }

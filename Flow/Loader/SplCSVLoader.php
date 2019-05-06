@@ -2,7 +2,7 @@
 
 namespace Kiboko\Component\ETL\Flow\Loader;
 
-use Kiboko\Component\ETL\Pipeline\GenericBucket;
+use Kiboko\Component\ETL\Pipeline\Bucket\AcceptanceResultBucket;
 
 class SplCSVLoader implements LoaderInterface
 {
@@ -57,7 +57,7 @@ class SplCSVLoader implements LoaderInterface
 
             $this->file->fputcsv($line, $this->delimiter, $this->enclosure, $this->escape);
 
-            yield new GenericBucket($line);
+            yield new AcceptanceResultBucket($line);
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Kiboko\Component\ETL\Flow\Transformer;
 
-use Kiboko\Component\ETL\Pipeline\GenericBucket;
+use Kiboko\Component\ETL\Pipeline\Bucket\AcceptanceResultBucket;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class NormalizationTransformer implements TransformerInterface
@@ -39,7 +39,7 @@ class NormalizationTransformer implements TransformerInterface
         while (true) {
             $data = yield;
 
-            yield new GenericBucket($this->normalizer->normalize($data, $this->format, $this->context));
+            yield new AcceptanceResultBucket($this->normalizer->normalize($data, $this->format, $this->context));
         }
     }
 }

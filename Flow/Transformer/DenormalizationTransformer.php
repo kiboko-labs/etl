@@ -2,7 +2,7 @@
 
 namespace Kiboko\Component\ETL\Flow\Transformer;
 
-use Kiboko\Component\ETL\Pipeline\GenericBucket;
+use Kiboko\Component\ETL\Pipeline\Bucket\AcceptanceResultBucket;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class DenormalizationTransformer implements TransformerInterface
@@ -50,7 +50,9 @@ class DenormalizationTransformer implements TransformerInterface
         while (true) {
             $data = yield;
 
-            yield new GenericBucket($this->denormalizer->denormalize($data, $this->class, $this->format, $this->context));
+            yield new AcceptanceResultBucket(
+                $this->denormalizer->denormalize($data, $this->class, $this->format, $this->context)
+            );
         }
     }
 }

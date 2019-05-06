@@ -3,8 +3,8 @@
 namespace Kiboko\Component\ETL\Flow\Transformer;
 
 use Kiboko\Component\ETL\Exception\UnexpectedYieldedValueType;
-use Kiboko\Component\ETL\Pipeline\MergeBucket;
-use Kiboko\Component\ETL\Pipeline\ResultBucketInterface;
+use Kiboko\Component\ETL\Pipeline\Bucket\AcceptanceAppendableResultBucket;
+use Kiboko\Component\ETL\Pipeline\Bucket\ResultBucketInterface;
 
 class ForkTransformer implements TransformerInterface
 {
@@ -33,7 +33,7 @@ class ForkTransformer implements TransformerInterface
         while (true) {
             $line = yield;
 
-            $mergeBucket = new MergeBucket();
+            $mergeBucket = new AcceptanceAppendableResultBucket();
 
             foreach ($coroutines as $coroutine) {
                 $coroutine->send($line);

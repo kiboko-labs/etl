@@ -2,8 +2,8 @@
 
 namespace Kiboko\Component\ETL\Flow\Transformer;
 
-use Kiboko\Component\ETL\Pipeline\EmptyBucket;
-use Kiboko\Component\ETL\Pipeline\GenericBucket;
+use Kiboko\Component\ETL\Pipeline\Bucket\AcceptanceResultBucket;
+use Kiboko\Component\ETL\Pipeline\Bucket\EmptyResultBucket;
 
 class FilterTransformer implements TransformerInterface
 {
@@ -27,11 +27,11 @@ class FilterTransformer implements TransformerInterface
             $line = yield;
 
             if (!$callback($line)) {
-                yield new EmptyBucket();
+                yield new EmptyResultBucket();
                 continue;
             }
 
-            yield new GenericBucket($line);
+            yield new AcceptanceResultBucket($line);
         }
     }
 }

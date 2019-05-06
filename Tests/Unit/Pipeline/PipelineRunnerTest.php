@@ -2,8 +2,8 @@
 
 namespace Kiboko\Component\ETL\Tests\Unit\Pipeline;
 
-use Kiboko\Component\ETL\Pipeline\EmptyBucket;
-use Kiboko\Component\ETL\Pipeline\GenericBucket;
+use Kiboko\Component\ETL\Pipeline\Bucket\AcceptanceResultBucket;
+use Kiboko\Component\ETL\Pipeline\Bucket\EmptyResultBucket;
 use Kiboko\Component\ETL\Pipeline\PipelineRunner;
 use Kiboko\Component\ETL\Tests\Unit\IterableTestCase;
 
@@ -22,7 +22,7 @@ class PipelineRunnerTest extends IterableTestCase
             ]),
             function() {
                 while ($item = yield) {
-                    yield new GenericBucket(strrev($item));
+                    yield new AcceptanceResultBucket(strrev($item));
                 }
             },
             [
@@ -47,9 +47,9 @@ class PipelineRunnerTest extends IterableTestCase
                 while ($item = yield) {
                     static $i = 0;
                     if ($i++ % 2 === 0) {
-                        yield new GenericBucket(strrev($item));
+                        yield new AcceptanceResultBucket(strrev($item));
                     } else {
-                        yield new EmptyBucket();
+                        yield new EmptyResultBucket();
                     }
                 }
             },
@@ -71,7 +71,7 @@ class PipelineRunnerTest extends IterableTestCase
             ]),
             function() {
                 while ($item = yield) {
-                    yield new GenericBucket(
+                    yield new AcceptanceResultBucket(
                         $item,
                         strrev($item)
                     );

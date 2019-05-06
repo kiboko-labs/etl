@@ -2,8 +2,6 @@
 
 namespace Kiboko\Component\ETL\Flow\Extractor;
 
-use Kiboko\Component\ETL\Pipeline\GenericBucket;
-
 class PDOExtractor implements ExtractorInterface
 {
     /**

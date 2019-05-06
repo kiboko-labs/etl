@@ -2,7 +2,7 @@
 
 namespace Kiboko\Component\ETL\Flow\Transformer;
 
-use Kiboko\Component\ETL\Pipeline\GenericBucket;
+use Kiboko\Component\ETL\Pipeline\Bucket\AcceptanceResultBucket;
 
 class CallableTransformer implements TransformerInterface
 {
@@ -25,7 +25,7 @@ class CallableTransformer implements TransformerInterface
         while (true) {
             $line = yield;
 
-            yield new GenericBucket(($this->callback)($line));
+            yield new AcceptanceResultBucket(($this->callback)($line));
         }
     }
 }

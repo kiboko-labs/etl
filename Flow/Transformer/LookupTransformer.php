@@ -2,8 +2,8 @@
 
 namespace Kiboko\Component\ETL\Flow\Transformer;
 
-use Kiboko\Component\ETL\Pipeline\EmptyBucket;
-use Kiboko\Component\ETL\Pipeline\GenericBucket;
+use Kiboko\Component\ETL\Pipeline\Bucket\AcceptanceResultBucket;
+use Kiboko\Component\ETL\Pipeline\Bucket\EmptyResultBucket;
 
 class LookupTransformer implements TransformerInterface
 {
@@ -35,9 +35,9 @@ class LookupTransformer implements TransformerInterface
             $line = yield;
 
             if ($line !== null) {
-                yield ($this->callback)($line, $this->statement);
+                yield new AcceptanceResultBucket(($this->callback)($line, $this->statement));
             } else {
-                yield new EmptyBucket();
+                yield new EmptyResultBucket();
             }
         }
     }

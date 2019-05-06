@@ -2,7 +2,7 @@
 
 namespace Kiboko\Component\ETL\Flow\Loader;
 
-use Kiboko\Component\ETL\Pipeline\GenericBucket;
+use Kiboko\Component\ETL\Pipeline\Bucket\AcceptanceResultBucket;
 
 class LDJSONLoader implements LoaderInterface
 {
@@ -26,7 +26,7 @@ class LDJSONLoader implements LoaderInterface
 
             $this->file->fwrite(json_encode($line) . "\n");
 
-            yield new GenericBucket($line);
+            yield new AcceptanceResultBucket($line);
         }
     }
 }

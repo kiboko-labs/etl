@@ -2,16 +2,9 @@
 
 namespace Kiboko\Component\ETL\Flow\Transformer;
 
-use Kiboko\Component\ETL\Flow\Extractor\IteratorExtractor;
-use Kiboko\Component\ETL\Iterator\IteratorLoggingWrapper;
-use Kiboko\Component\ETL\Pipeline\AppendableBucket;
-use Kiboko\Component\ETL\Pipeline\GenericBucket;
-use Kiboko\Component\ETL\Pipeline\IteratorBucket;
+use Kiboko\Component\ETL\Pipeline\Bucket\AcceptanceIteratorResultBucket;
 use Kiboko\Component\ETL\Pipeline\Pipeline;
-use Kiboko\Component\ETL\Pipeline\PipelineInterface;
 use Kiboko\Component\ETL\Pipeline\PipelineRunnerInterface;
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
 
 class ChildPipelineTransformer implements TransformerInterface
 {
@@ -51,7 +44,7 @@ class ChildPipelineTransformer implements TransformerInterface
             $pipeline = new Pipeline($this->pipelineRunner, $queue);
             ($this->builder)($pipeline);
 
-            yield new IteratorBucket($pipeline->walk());
+            yield new AcceptanceIteratorResultBucket($pipeline->walk());
         }
     }
 }

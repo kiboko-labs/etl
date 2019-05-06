@@ -6,17 +6,25 @@ use Kiboko\Component\ETL\Flow\Extractor\ExtractorInterface;
 use Kiboko\Component\ETL\Flow\FlushableInterface;
 use Kiboko\Component\ETL\Flow\Loader\LoaderInterface;
 use Kiboko\Component\ETL\Flow\Transformer\TransformerInterface;
+use Kiboko\Component\ETL\Pipeline\Bucket\AcceptanceAppendableResultBucket;
 use Kiboko\Component\ETL\Pipeline\Feature\ExtractingInterface;
 use Kiboko\Component\ETL\Pipeline\Feature\ForkingInterface;
 use Kiboko\Component\ETL\Pipeline\Feature\LoadingInterface;
+use Kiboko\Component\ETL\Pipeline\Feature\RunnableInterface;
 use Kiboko\Component\ETL\Pipeline\Feature\TransformingInterface;
+use Kiboko\Component\ETL\Pipeline\Feature\WalkableInterface;
 
-class Pipeline implements PipelineInterface, ForkingInterface
+class Pipeline implements PipelineInterface, ForkingInterface, WalkableInterface, RunnableInterface
 {
+    /**
+     * @var \AppendIterator
+     */
+    private $source;
+
     /**
      * @var iterable
      */
-    private $source;
+    private $subject;
 
     /**
      * @var PipelineRunnerInterface
@@ -25,51 +33,56 @@ class Pipeline implements PipelineInterface, ForkingInterface
 
     public function __construct(PipelineRunnerInterface $runner, ?\Iterator $source = null)
     {
-        $this->source = $source ?? new \EmptyIterator();
+        $this->source = new \AppendIterator();
+        $this->source->append($source ?? new \EmptyIterator());
+
+        $this->subject = new \NoRewindIterator($this->source);
         $this->runner = $runner;
+    }
+
+    public function feed(...$data): void
+    {
+        $this->source->append(new \ArrayIterator($data));
     }
 
     public function fork(callable ...$builders): ForkingInterface
     {
-        $sources = [];
-        $pipelines = [];
+        $runner = $this->runner;
+        $handlers = [];
         foreach ($builders as $builder) {
-            $sources[] = $source = new \SplQueue();
-            $source->setIteratorMode(\SplDoublyLinkedList::IT_MODE_DELETE);
+            $handlers[] = $handler = new class(new Pipeline($runner)) {
+                /** @var PipelineInterface */
+                public $pipeline;
+                /** @var \Iterator */
+                public $consumer;
 
-            $builder($pipeline = new Pipeline($this->runner, $source));
+                public function __construct(PipelineInterface $pipeline)
+                {
+                    $this->pipeline = $pipeline;
+                    $this->consumer = $pipeline->walk();
+                    $this->consumer->rewind();
+                }
+            };
 
-            $pipelines[] = $iterator = $pipeline->walk();
-            $iterator->rewind();
+            $builder($handler->pipeline);
         }
 
-        $this->source = $this->runner->run($this->source, (function(array $pipelines, array $sources) {
+        $this->subject = $this->runner->run($this->subject, (function(array $handlers) {
             while (true) {
                 $line = yield;
 
-                /** @var \SplQueue $source */
-                foreach ($sources as $source) {
-                    $source->enqueue($line);
-                }
-
-                $bucket = new AppendableBucket();
-                foreach ($pipelines as $pipeline) {
-                    $bucket->append(...$this->splat($pipeline));
+                $bucket = new AcceptanceAppendableResultBucket();
+                /** @var \Iterator $handler */
+                foreach ($handlers as $handler) {
+                    $handler->pipeline->feed($line);
+                    $bucket->append(new \NoRewindIterator($handler->consumer));
                 }
 
                 yield $bucket;
             }
-        })($pipelines, $sources));
+        })($handlers));
 
         return $this;
-    }
-
-    private function splat(\Iterator $iterator)
-    {
-        while ($iterator->valid()) {
-            yield $iterator->current();
-            $iterator->next();
-        }
     }
 
     /**
@@ -79,21 +92,13 @@ class Pipeline implements PipelineInterface, ForkingInterface
      */
     public function extract(ExtractorInterface $extractor): ExtractingInterface
     {
+        $this->source->append($extractor->extract());
+
         if ($extractor instanceof FlushableInterface) {
-            $iterator = new \AppendIterator();
-
-            $iterator->append(
-                $main = $extractor->extract()
-            );
-
-            $iterator->append((function(FlushableInterface $flushable) {
+            $this->source->append((function(FlushableInterface $flushable) {
                 yield from $flushable->flush();
             })($extractor));
-        } else {
-            $iterator = $extractor->extract();
         }
-
-        $this->source = new \NoRewindIterator($iterator);
 
         return $this;
     }
@@ -109,17 +114,17 @@ class Pipeline implements PipelineInterface, ForkingInterface
             $iterator = new \AppendIterator();
 
             $iterator->append(
-                $main = $this->runner->run($this->source, $transformer->transform())
+                $main = $this->runner->run($this->subject, $transformer->transform())
             );
 
             $iterator->append((function(FlushableInterface $flushable) {
                 yield from $flushable->flush();
             })($transformer));
         } else {
-            $iterator = $this->runner->run($this->source, $transformer->transform());
+            $iterator = $this->runner->run($this->subject, $transformer->transform());
         }
 
-        $this->source = new \NoRewindIterator($iterator);
+        $this->subject = new \NoRewindIterator($iterator);
 
         return $this;
     }
@@ -135,17 +140,17 @@ class Pipeline implements PipelineInterface, ForkingInterface
             $iterator = new \AppendIterator();
 
             $iterator->append(
-                $main = $this->runner->run($this->source, $loader->load())
+                $main = $this->runner->run($this->subject, $loader->load())
             );
 
             $iterator->append((function(FlushableInterface $flushable) {
                 yield from $flushable->flush();
             })($loader));
         } else {
-            $iterator = $this->runner->run($this->source, $loader->load());
+            $iterator = $this->runner->run($this->subject, $loader->load());
         }
 
-        $this->source = new \NoRewindIterator($iterator);
+        $this->subject = new \NoRewindIterator($iterator);
 
         return $this;
     }
@@ -155,7 +160,7 @@ class Pipeline implements PipelineInterface, ForkingInterface
      */
     public function walk(): \Iterator
     {
-        yield from $this->source;
+        yield from $this->subject;
     }
 
     /**

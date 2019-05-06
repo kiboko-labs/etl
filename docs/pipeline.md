@@ -119,7 +119,7 @@ $pipeline = new Pipeline\Pipeline(
 $pipeline
     ->extract(new Extractor\SplCSVExtractor(new SplFileObject(__DIR__ . '/input-file.csv', 'r')))
     ->transform(new Transformer\CallableTransformer(function($line) {
-        return new Pipeline\GenericBucket([
+        return new Pipeline\Bucket\AcceptanceResultBucket([
             'title' => $line['Product name'],
             'identifier' => $line['SKU'],
             'public_price' => $line['Price Incl. Tax'],
@@ -166,7 +166,7 @@ $pipeline
         'Description'
     ]))
     ->transform(new Transformer\CallableTransformer(function($line){
-        return new Pipeline\GenericBucket([
+        return new Pipeline\Bucket\AcceptanceResultBucket(([
             'id' => $line['Identifier'],
             'sku' => $line['EAN'],
             'name' => $line['Description'],

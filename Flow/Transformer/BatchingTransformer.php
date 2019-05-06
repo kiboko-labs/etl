@@ -3,9 +3,9 @@
 namespace Kiboko\Component\ETL\Flow\Transformer;
 
 use Kiboko\Component\ETL\Flow\FlushableInterface;
-use Kiboko\Component\ETL\Pipeline\AppendableBucket;
-use Kiboko\Component\ETL\Pipeline\EmptyBucket;
-use Kiboko\Component\ETL\Pipeline\ResultBucketInterface;
+use Kiboko\Component\ETL\Pipeline\Bucket\AcceptanceAppendableResultBucket;
+use Kiboko\Component\ETL\Pipeline\Bucket\EmptyResultBucket;
+use Kiboko\Component\ETL\Pipeline\Bucket\ResultBucketInterface;
 
 class BatchingTransformer implements TransformerInterface, FlushableInterface
 {
@@ -25,12 +25,12 @@ class BatchingTransformer implements TransformerInterface, FlushableInterface
     public function __construct(int $batchSize)
     {
         $this->batchSize = $batchSize;
-        $this->bucket = new EmptyBucket();
+        $this->bucket = new EmptyResultBucket();
     }
 
     public function transform(): \Generator
     {
-        $this->bucket = new AppendableBucket();
+        $this->bucket = new AcceptanceAppendableResultBucket();
         $itemCount = 0;
         while (true) {
             $line = yield;
@@ -40,9 +40,9 @@ class BatchingTransformer implements TransformerInterface, FlushableInterface
             if ($this->batchSize <= ++$itemCount) {
                 yield $this->bucket;
                 $itemCount = 0;
-                $this->bucket = new AppendableBucket();
+                $this->bucket = new AcceptanceAppendableResultBucket();
             } else {
-                yield new EmptyBucket();
+                yield new EmptyResultBucket();
             }
         }
     }

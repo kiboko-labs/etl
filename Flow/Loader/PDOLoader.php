@@ -2,8 +2,7 @@
 
 namespace Kiboko\Component\ETL\Flow\Loader;
 
-use Kiboko\Component\ETL\Pipeline\EmptyBucket;
-use Kiboko\Component\ETL\Pipeline\GenericBucket;
+use Kiboko\Component\ETL\Pipeline\Bucket\AcceptanceResultBucket;
 
 class PDOLoader implements LoaderInterface
 {
@@ -32,7 +31,7 @@ class PDOLoader implements LoaderInterface
 
             $this->preparedStatement->execute(($this->fieldMapping)($line));
 
-            yield new GenericBucket($line);
+            yield new AcceptanceResultBucket($line);
         }
     }
 }

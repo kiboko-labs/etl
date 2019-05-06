@@ -2,35 +2,32 @@
 
 namespace Kiboko\Component\ETL\Pipeline;
 
-class MergeBucket implements ResultBucketInterface
+use Kiboko\Component\ETL\Pipeline\Bucket\ComplexResultBucket;
+
+/**
+ * @deprecated
+ */
+class MergeBucket extends ComplexResultBucket implements ResultBucketInterface
 {
-    /**
-     * @var ResultBucketInterface[]
-     */
-    private $buckets;
-
-    /**
-     * @param ResultBucketInterface[] $buckets
-     */
-    public function __construct(ResultBucketInterface... $buckets)
-    {
-        $this->buckets = $buckets;
-    }
-
-    public function append(ResultBucketInterface ...$buckets)
-    {
-        $this->buckets = array_merge(
-            $this->buckets,
-            $buckets
-        );
-    }
-
     public function getIterator()
     {
-        $iterator = new \AppendIterator();
-        foreach ($this->buckets as $child) {
-            $iterator->append($child->getIterator());
+        /** @var array|\Traversable $acceptance */
+        $acceptance = $this->walkAcceptance();
+        if (is_array($acceptance)) {
+            return new \ArrayIterator($acceptance);
         }
-        return $iterator;
+
+        return new \IteratorIterator($acceptance);
     }
 }
+
+trigger_error(
+    strtr(
+        'The class %deprecated% is deprecated, please use %replacement% instead',
+        [
+            '%deprecated%' => MergeBucket::class,
+            '%replacement%' => ComplexResultBucket::class,
+        ]
+    ),
+    E_USER_DEPRECATED
+);
