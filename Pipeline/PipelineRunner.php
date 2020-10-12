@@ -13,7 +13,11 @@ class PipelineRunner implements PipelineRunnerInterface
 
         while ($wrapper->valid($iterator)) {
             $bucket = $generator->send($iterator->current());
-
+            
+            if (!$bucket) {
+                break;
+            }
+            
             if (!$bucket instanceof ResultBucketInterface) {
                 throw UnexpectedYieldedValueType::expectingType(
                     $generator,
