@@ -1,6 +1,8 @@
 Kiboko ETL component
 ====================
 
+> ‼️ Warning: This library is not maintained here anymore, and became [Gyroscops](https://php-etl.github.io/documentation/)
+
 Introduction
 ------------
 
