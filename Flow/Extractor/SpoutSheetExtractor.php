@@ -35,14 +35,14 @@ class SpoutSheetExtractor implements ExtractorInterface
 
         $this->skipLines($iterator, $this->skipLines);
 
-        $columns = $iterator->current();
+        $columns = $iterator->current()->toArray();
         $columnCount = count($columns);
 
         $iterator->next();
 
         $currentLine = $this->skipLines + 1;
         while ($iterator->valid()) {
-            $line = $iterator->current();
+            $line = $iterator->current()->toArray();
             $cellCount = count($line);
 
             if ($columnCount < $cellCount) {
