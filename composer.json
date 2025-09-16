@@ -10,13 +10,11 @@
         }
     ],
     "require": {
-        "nikic/php-parser": "^4.2"
+        "nikic/php-parser": "^5.3.0"
     },
     "require-dev": {
         "ext-pdo": "*",
-        "phpunit/phpunit": "6.5.*",
-        "johnkary/phpunit-speedtrap": "^2.0",
-        "mybuilder/phpunit-accelerator": "^2.0",
+        "phpunit/phpunit": "^9.5",
         "box/spout": "^3.1",
         "symfony/serializer": "^3.4 || ^4.0",
         "monolog/monolog": "^1.24"
